@@ -254,3 +254,331 @@ async function processData() {
 
 
 
+
+// *------------------
+// * void Type
+// *------------------
+
+// ChatGPT said:
+// ChatGPT
+// In TypeScript, the void type represents the absence of a return value from a function. A function that does not return any value explicitly has a return type of void.
+
+// Key Points About void
+// Indicates No Return Value: Functions that don't return a meaningful value (e.g., logging functions) have the void return type.
+// Cannot Assign Values: You cannot assign a void type to any variable except undefined (if allowed).
+// Return Value is Optional: Functions with void can still implicitly return undefined.
+// Examples
+// 1. Void in Functions
+// Functions that perform an action without returning a value (like logging to the console) are typed with void.
+
+// typescript
+// Copy code
+// function logMessage(message: string): void {
+//     console.log(message);
+// }
+
+// logMessage("Hello, world!"); // Output: Hello, world!
+// 2. Void in Variables
+// You generally don't use void for variables, but it is technically allowed to assign undefined to them.
+
+// typescript
+// Copy code
+// let result: void;
+
+// // result = 10; // ❌ Error: Type '10' is not assignable to type 'void'
+// result = undefined; // ✅ Works
+// Void vs. Undefined
+// While void and undefined might seem similar, they are distinct:
+
+// Feature	void	undefined
+// Purpose	Used for functions with no return value.	Represents the absence of a defined value.
+// Assignable	Can only be assigned undefined.	Can hold the value undefined.
+// Default Behavior	A void function can return undefined implicitly.	Variables explicitly hold the value undefined.
+// Practical Use Cases
+// 1. Callback Functions with No Return Value
+// You can use void for callbacks that don't return a value.
+
+// typescript
+// Copy code
+// function executeCallback(callback: () => void): void {
+//     callback();
+// }
+
+// executeCallback(() => {
+//     console.log("This is a callback!");
+// }); // Output: This is a callback!
+// 2. Event Handlers
+// Event handlers typically don't return a value, so their type can be void.
+
+// typescript
+// Copy code
+// type ClickHandler = (event: MouseEvent) => void;
+
+// const handleClick: ClickHandler = (event) => {
+//     console.log(`Button clicked: ${event.type}`);
+// };
+// Can a Void Function Return?
+// A void function can implicitly return undefined, but it cannot return any other value explicitly.
+
+// Example:
+// typescript
+// Copy code
+// function doNothing(): void {
+//     return; // ✅ This is allowed (implicitly returns `undefined`).
+// }
+
+// // function invalidReturn(): void {
+// //     return 10; // ❌ Error: Type '10' is not assignable to type 'void'.
+// // }
+// Void vs. Never
+// void and never are often compared since both deal with functions, but their purposes differ significantly:
+
+// Feature	void	never
+// Meaning	Function doesn't return a value.	Function never returns (e.g., throws or loops forever).
+// Assignable Values	Can return undefined.	Cannot return anything.
+// Use Case	For functions that perform an action but don't return a value.	For functions that throw errors or never terminate.
+// Best Practices
+// Use Explicit Return Types:
+// Declare void explicitly for functions with no return value.
+// Avoid Using void for Variables:
+// Use undefined or other appropriate types for variables.
+// Let me know if you have more questions about void or its use cases! 😊
+
+
+
+
+
+
+// *------------------
+// * never Type
+// *------------------
+
+
+// ChatGPT said:
+// ChatGPT
+// In TypeScript, the never type represents a value that never occurs. It's commonly used in functions that throw errors, infinite loops, or situations where something logically shouldn't exist. The never type ensures that no value can be assigned to it.
+
+// Key Points About never
+// No Possible Value: A variable of type never can never hold any value.
+// Used for Unreachable Code: It is often used for functions that don't return (e.g., throw exceptions or run indefinitely).
+// Subtype of All Types: The never type is a subtype of all types but has no subtype itself except never.
+// Examples
+// 1. Function That Throws an Error
+// A function that always throws an error never successfully completes. Therefore, its return type is never.
+
+// typescript
+// Copy code
+// function throwError(message: string): never {
+//     throw new Error(message);
+// }
+// 2. Infinite Loop
+// A function with an infinite loop never returns.
+
+// typescript
+// Copy code
+// function infiniteLoop(): never {
+//     while (true) {
+//         console.log("Running forever...");
+//     }
+// }
+// 3. Exhaustive Checks
+// The never type is useful when performing exhaustive checks, especially in discriminated unions.
+
+// typescript
+// Copy code
+// type Shape = 
+//   | { kind: "circle"; radius: number }
+//   | { kind: "square"; side: number };
+
+// function getArea(shape: Shape): number {
+//     switch (shape.kind) {
+//         case "circle":
+//             return Math.PI * shape.radius ** 2;
+//         case "square":
+//             return shape.side ** 2;
+//         default:
+//             const _exhaustiveCheck: never = shape;
+//             throw new Error(`Unhandled shape kind: ${_exhaustiveCheck}`);
+//     }
+// }
+// In this example:
+
+// If a new kind of shape (e.g., "triangle") is added to the Shape type but isn't handled in the switch, TypeScript will give a compile-time error for the never variable _exhaustiveCheck.
+// When to Use never
+// Error-Throwing Functions:
+// To indicate that a function doesn't return normally.
+// Exhaustive Type Checking:
+// To ensure all possible cases in a union type are handled.
+// Assertions for Unreachable Code:
+// To mark code paths that logically should never execute.
+// Common Mistakes with never
+// Assigning Values to never
+// You cannot assign any value to a never type.
+
+// typescript
+// Copy code
+// let x: never;
+
+// // x = 10; // ❌ Error: Type '10' is not assignable to type 'never'
+// Incorrect Return Type
+// If a function is expected to return never, any return statement other than throw or an infinite loop will result in an error.
+
+// typescript
+// Copy code
+// function shouldNeverReturn(): never {
+//     return; // ❌ Error: Function returning 'never' cannot have a return statement.
+// }
+// Practical Applications
+// 1. Validating Exhaustive Unions
+// typescript
+// Copy code
+// type TrafficLight = "red" | "yellow" | "green";
+
+// function reactToLight(light: TrafficLight): string {
+//     switch (light) {
+//         case "red":
+//             return "Stop";
+//         case "yellow":
+//             return "Slow down";
+//         case "green":
+//             return "Go";
+//         default:
+//             const _exhaustive: never = light; // Ensures all cases are handled.
+//             return _exhaustive; // This will throw an error if there's an unhandled case.
+//     }
+// }
+// 2. Assertions for Unreachable Code
+// typescript
+// Copy code
+// function assertUnreachable(x: never): never {
+//     throw new Error(`Unexpected value: ${x}`);
+// }
+
+// function getValue(input: string | number): string {
+//     if (typeof input === "string") {
+//         return input.toUpperCase();
+//     } else if (typeof input === "number") {
+//         return input.toFixed(2);
+//     } else {
+//         return assertUnreachable(input); // Ensures input is either string or number.
+//     }
+// }
+// Comparison: void vs never
+// Feature	void	never
+// Meaning	Function doesn't return a value.	Function doesn't return at all (e.g., throws).
+// Assignable Values	Can return undefined.	Cannot return anything.
+// Use Case	Normal functions without a return value.	Functions that throw errors or have unreachable code.
+// Let me know if you'd like further examples or clarification! 😊
+
+
+
+
+
+// *------------------
+// * void vs never Type
+// *------------------
+
+// ChatGPT said:
+// ChatGPT
+// Here’s a detailed comparison between void and never in TypeScript:
+
+// Feature	void	never
+// Meaning	Represents the absence of a return value.	Represents a value that never exists or a function that never returns.
+// Purpose	For functions that return no meaningful value.	For functions that always throw errors or run indefinitely.
+// Assignable Values	Can only be assigned undefined.	Cannot have any value assigned.
+// Subtype of	A supertype of undefined and other types.	Subtype of all types, but has no subtype except itself.
+// Return Behavior	Can implicitly return undefined.	Cannot return anything (function either throws or loops indefinitely).
+// Use Cases	Logging, event handlers, and callbacks that don’t return a value.	Functions that throw errors, infinite loops, or exhaustive type checks.
+// Code Examples
+// 1. Void Function
+// A void function performs an action but does not return a meaningful value.
+
+// typescript
+// Copy code
+// function logMessage(message: string): void {
+//     console.log(message);
+// }
+
+// logMessage("Hello, world!"); // Output: Hello, world!
+// The logMessage function does not return any value, so its type is void.
+// 2. Never Function
+// A never function never completes. It either throws an error or runs forever.
+
+// typescript
+// Copy code
+// function throwError(message: string): never {
+//     throw new Error(message);
+// }
+
+// function infiniteLoop(): never {
+//     while (true) {
+//         console.log("Running forever...");
+//     }
+// }
+// throwError and infiniteLoop do not return because they either throw or run indefinitely.
+// Void vs. Never: Use in Exhaustive Checks
+// Using never for Exhaustive Type Checks
+// The never type ensures all possible cases in a union are handled.
+
+// typescript
+// Copy code
+// type Animal = 
+//   | { type: "dog"; breed: string }
+//   | { type: "cat"; color: string };
+
+// function handleAnimal(animal: Animal): string {
+//     switch (animal.type) {
+//         case "dog":
+//             return `Dog breed: ${animal.breed}`;
+//         case "cat":
+//             return `Cat color: ${animal.color}`;
+//         default:
+//             const _exhaustiveCheck: never = animal; // Ensures all cases are handled.
+//             throw new Error(`Unhandled case: ${_exhaustiveCheck}`);
+//     }
+// }
+// The never variable _exhaustiveCheck ensures that if a new type (e.g., "bird") is added to Animal, the code will fail at compile time if it's not handled.
+// Using void for Callbacks
+// Void is ideal for callbacks that don’t need to return a value.
+
+// typescript
+// Copy code
+// function executeCallback(callback: () => void): void {
+//     callback();
+// }
+
+// executeCallback(() => {
+//     console.log("Callback executed!");
+// }); // Output: Callback executed!
+// Key Differences
+// Aspect	void	never
+// Returning Values	A void function can implicitly return undefined.	A never function cannot return anything.
+// Purpose	Used when a function doesn’t return a meaningful value.	Used when a function never returns or reaches the end.
+// Type Assignments	A void type can be assigned undefined.	never cannot be assigned any value.
+// Compile-Time Checks	Does not enforce exhaustive checks.	Helps enforce exhaustive type checks.
+// When to Use
+// Scenario	Use void	Use never
+// A function doesn’t return a value explicitly.	✅ For event handlers, loggers, or simple utilities.	❌ Not needed.
+// A function throws an error or loops indefinitely.	❌ Invalid.	✅ For error handling or infinite loops.
+// Perform exhaustive type checks.	❌ Use never.	✅ Ensures all cases are handled.
+// Example in Practice
+// Here’s a combined example to highlight both void and never:
+
+// typescript
+// Copy code
+// function processInput(input: string | number): void | never {
+//     if (typeof input === "string") {
+//         console.log(`String input: ${input}`);
+//     } else if (typeof input === "number") {
+//         console.log(`Number input: ${input}`);
+//     } else {
+//         throwError(input); // Ensures no unexpected input.
+//     }
+// }
+
+// function throwError(value: never): never {
+//     throw new Error(`Unexpected value: ${value}`);
+// }
+// void is used for normal cases (string or number) where we log output.
+// never is used to handle unexpected input types.
+// Let me know if you'd like further clarification or examples! 😊
