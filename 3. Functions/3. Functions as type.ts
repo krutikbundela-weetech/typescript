@@ -18,10 +18,10 @@
 // You can assign any function to myFunction.
 // TypeScript doesn’t enforce argument types or return types.
 
-// *Example 
+// *Example
 
 function add(num1: number, num: number): number {
-    return num + num1;
+  return num + num1;
 }
 function printResult(num: number): void {
   console.log("Result: " + num);
@@ -33,15 +33,13 @@ printResult(add(5, 12));
 // let combineValues:Function;
 
 //* ahiya function ni proper retrun type and parameter type define kri che etle hve evi type naa j function aa variable maa store thai sakseeee
-let combineValues: (a:number,b:number) => number;
+let combineValues: (a: number, b: number) => number;
 
 combineValues = add;
-// combineValues = printResult; //function type different che 
+// combineValues = printResult; //function type different che
 // combineValues = 5;
 
-
 console.log("file: 3. Functions as type.ts:34 ~ combineValues:", combineValues);
-
 
 
 
